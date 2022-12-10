@@ -24,6 +24,7 @@ public class CourseService {
         Student student = this.studentRepository.findById(8L).orElseThrow(
                 () -> new IllegalArgumentException("Student with this id is not found."));
         course.removeStudent(student);
+        log.info("student is removed ", student);
     }
 
     @Transactional(readOnly = true)

@@ -49,9 +49,11 @@ public class Author {
     private String genre;
     private Integer age;
 
+    @Builder.Default
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Book> books = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     @Where(clause = "price <= 20")
     private Set<Book> cheapBooks = new HashSet<>();

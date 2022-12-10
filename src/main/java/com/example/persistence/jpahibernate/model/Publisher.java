@@ -29,6 +29,7 @@ public class Publisher {
 
     private String publisher;
 
+    @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "publisher")
     private Set<Book> books = new HashSet<>();
 

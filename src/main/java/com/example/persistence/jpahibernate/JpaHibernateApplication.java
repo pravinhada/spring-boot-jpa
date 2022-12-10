@@ -33,6 +33,7 @@ public class JpaHibernateApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        log.info("test the spring data jpa hibernate");
         //this.bookService.insertBook();
         //this.authorService.fetchBooksOfAuthorById(1L);
         //this.courseService.removeStudent();
