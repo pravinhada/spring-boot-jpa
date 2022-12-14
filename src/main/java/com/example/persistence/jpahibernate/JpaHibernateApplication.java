@@ -43,5 +43,9 @@ public class JpaHibernateApplication implements CommandLineRunner {
         publishers.forEach(p -> p.getBooks().forEach(b -> System.out.println(b.getAuthor())));
 
         this.authorService.getAllCheapBooks();
+
+        //List<AuthorDto> authorDtos = this.authorRepository.findBy();
+
+        //authorDtos.forEach(a -> log.info("{}, {}, {}, {}", a.getName(), a.getGenre(), a.getAge(), a.getBooks()));
     }
 }

@@ -34,6 +34,7 @@ public class Student {
 
     private String name;
 
+    @Builder.Default
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "course_student",
