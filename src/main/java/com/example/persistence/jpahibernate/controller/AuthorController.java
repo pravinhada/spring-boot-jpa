@@ -20,13 +20,16 @@ public class AuthorController {
 
     private final AuthorService authorService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AuthorDto> findBy() {
-        //return this.authorService.findByJoinFetch();
         return this.authorService.findBy();
     }
 
-    //@GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<AuthorDto> findByJoinFetch() {
+        return this.authorService.findByJoinFetch();
+    }
+
+    // @GetMapping
     public List<AuthorMapperDto> findByViaArrayOfObjectsWithIds() {
         return this.authorService.findByViaArrayOfObjectsWithIds();
     }
