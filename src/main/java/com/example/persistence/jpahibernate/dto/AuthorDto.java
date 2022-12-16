@@ -9,9 +9,11 @@ public interface AuthorDto {
 
     Integer getAge();
 
-    List<BookDto> getBooks();
+    List<AuthorBookDto> getBooks();
 
-    public interface BookDto {
+    public interface AuthorBookDto {
         String getTitle();
+
+        Integer getPrice();
     }
 }

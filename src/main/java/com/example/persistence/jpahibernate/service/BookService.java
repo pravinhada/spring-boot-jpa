@@ -1,10 +1,14 @@
 package com.example.persistence.jpahibernate.service;
 
+import com.example.persistence.jpahibernate.dto.BookDto;
 import com.example.persistence.jpahibernate.model.Author;
 import com.example.persistence.jpahibernate.model.Book;
 import com.example.persistence.jpahibernate.repo.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,5 +32,15 @@ public class BookService {
     @Transactional
     public void removeBook() {
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<BookDto> fetchBooksAuthorsJoinFetch() {
+        return this.bookRepository.fetchBooksAuthorsJoinFetch();
+    }
+
+    @Transactional(readOnly = true) 
+    public List<BookDto> findBy() {
+       return this.bookRepository.findBy(); 
     }
 }
