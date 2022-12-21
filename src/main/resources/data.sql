@@ -88,10 +88,12 @@ insert into course_student(course_id, student_id) values(1, 9);
 insert into course_student(course_id, student_id) values(1, 10);
 
 insert into author(name, genre, age) values('Anghel Leonard', 'computer', 44);
+insert into author(name, genre, age) values('Robert C. Martin', 'computer', 46);
 
 insert into publisher(publisher) values ('aPress');
 
 insert into book(title, isbn, price, author_id, publisher_id) values('system design', '3434-3434-BDF', 15.99, 1, 1);
 insert into book(title, isbn, price, author_id, publisher_id) values('computer programming', '3434-3434-BDF', 24.99, 1, 1);
 insert into book(title, isbn, price, author_id, publisher_id) values('database management', '3434-3434-BDF', 20.99, 1, 1);
+insert into book(title, isbn, price, author_id, publisher_id) values('clean code', '2309-1223-CLN', 35.99, 2, 1);
 
