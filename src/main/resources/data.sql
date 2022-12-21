@@ -54,15 +54,15 @@ insert into course(name, category) values('Software engineering', 'Computer Scie
 insert into course(name, category) values('Database management', 'Computer Science');
 insert into course(name, category) values('Programming Language', 'Computer Science');
 
-insert into address(street, city, state, zip) values('1 lincoln street', 'Boston', 'MA', 2001);
-insert into address(street, city, state, zip) values('20 summer street', 'Boston', 'MA', 2001);
+insert into address(street, city, state, zip) values('1 miller street', 'Arlington', 'MA', 2001);
+insert into address(street, city, state, zip) values('20 summer street', 'Dorchester', 'MA', 2001);
 insert into address(street, city, state, zip) values('10 mass av', 'cambridge', 'MA', 2001);
 insert into address(street, city, state, zip) values('3 lexington street', 'lexington', 'MA', 2001);
 insert into address(street, city, state, zip) values('1 round hill st', 'JP', 'MA', 2001);
-insert into address(street, city, state, zip) values('15 huntington ave', 'Boston', 'MA', 2001);
-insert into address(street, city, state, zip) values('5 bill street', 'Boston', 'MA', 2001);
+insert into address(street, city, state, zip) values('15 huntington ave', 'Milford', 'MA', 2001);
+insert into address(street, city, state, zip) values('5 bill street', 'Rockville', 'MA', 2001);
 insert into address(street, city, state, zip) values('3 old town rd', 'Boston', 'MA', 2001);
-insert into address(street, city, state, zip) values('12 canterbury rd', 'woburn', 'MA', 2001);
+insert into address(street, city, state, zip) values('12 roxbury rd', 'Springfield', 'MA', 2001);
 insert into address(street, city, state, zip) values('1 mass ave', 'Arlington', 'MA', 2001);
 
 insert into student(name, address_id) values('bob', 1);
