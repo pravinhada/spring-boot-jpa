@@ -6,11 +6,10 @@ import com.example.persistence.jpahibernate.model.Book;
 import com.example.persistence.jpahibernate.repo.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -39,8 +38,13 @@ public class BookService {
         return this.bookRepository.fetchBooksAuthorsJoinFetch();
     }
 
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<BookDto> findBy() {
-       return this.bookRepository.findBy(); 
+        return this.bookRepository.findBy();
+    }
+
+    @Transactional(readOnly = true)
+    public BookDto findByBookId(Long id) {
+        return this.bookRepository.findByBookId(id);
     }
 }

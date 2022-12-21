@@ -4,6 +4,7 @@ import com.example.persistence.jpahibernate.dto.BookDto;
 import com.example.persistence.jpahibernate.service.BookService;
 import lombok.SneakyThrows;
 import org.hamcrest.core.Is;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(BookController.class)
@@ -29,10 +31,11 @@ class BookControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    @SneakyThrows
-    void testFindBy() {
-        BookDto bookDto = new BookDto() {
+    private BookDto bookDto;
+
+    @BeforeEach
+    void init() {
+        this.bookDto = new BookDto() {
             @Override
             public String getTitle() {
                 return "system design";
@@ -50,15 +53,32 @@ class BookControllerTest {
 
             @Override
             public BookAuthorDto getAuthor() {
-                return null;
+                return () -> "Anghel Leonard";
             }
         };
-        when(this.bookService.findBy()).thenReturn(List.of(bookDto));
+    }
+
+    @Test
+    @SneakyThrows
+    void testFindBy() {
+        when(this.bookService.findBy()).thenReturn(List.of(this.bookDto));
         mockMvc.perform(MockMvcRequestBuilders.get("/books"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].title", Is.is("system design")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].isbn", Is.is("3434-3434-BDF")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].price", Is.is(34.99)));
+    }
+
+    @Test
+    @SneakyThrows
+    void testFindByBookId() {
+        when(this.bookService.findByBookId(anyLong())).thenReturn(this.bookDto);
+        mockMvc.perform(MockMvcRequestBuilders.get("/books/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", Is.is("system design")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.isbn", Is.is("3434-3434-BDF")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price", Is.is(34.99)));
     }
 }
