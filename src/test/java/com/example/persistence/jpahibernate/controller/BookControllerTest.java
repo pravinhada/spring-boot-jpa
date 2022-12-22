@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(BookController.class)
@@ -75,6 +76,18 @@ class BookControllerTest {
     void testFindByBookId() {
         when(this.bookService.findByBookId(anyLong())).thenReturn(this.bookDto);
         mockMvc.perform(MockMvcRequestBuilders.get("/books/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", Is.is("system design")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.isbn", Is.is("3434-3434-BDF")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price", Is.is(34.99)));
+    }
+
+    @Test
+    @SneakyThrows
+    void testFindByBookTitle() {
+        when(this.bookService.findByBookTitle(anyString())).thenReturn(this.bookDto);
+        mockMvc.perform(MockMvcRequestBuilders.get("/books/system%20design/title"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.title", Is.is("system design")))

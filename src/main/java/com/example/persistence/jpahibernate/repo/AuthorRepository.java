@@ -22,7 +22,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     List<Author> findAll();
 
     // ad-hoc entity graph
-    @EntityGraph(attributePaths = { "books.publisher" }, type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"books.publisher"}, type = EntityGraph.EntityGraphType.FETCH)
     List<Author> findByAgeLessThanOrderByNameDesc(int age);
 
     List<AuthorDto> findBy();
@@ -37,9 +37,11 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     List<AuthorDto> findByJoinFetch();
 
     @Query("""
-            select a.id as authorId, a.name as name, a.genre as genre, b.id as bookId, b.title as title
-            from Author a inner join a.books b
+            select a.id as authorId, a.name as name, a.genre as genre, b.id as bookId, b.title as title,
+            b.isbn as isbn, b.price as price
+            from Author a left join a.books b
             """)
     public List<Object[]> findByViaArrayOfObjectsWithIds();
 
+    List<Author> findAuthorByNameIgnoreCase(String string);
 }

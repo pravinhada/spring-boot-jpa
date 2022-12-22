@@ -14,6 +14,8 @@ public interface AuthorDto {
     public interface AuthorBookDto {
         String getTitle();
 
+        String getIsbn();
+
         Integer getPrice();
     }
 }

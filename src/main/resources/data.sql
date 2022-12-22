@@ -35,12 +35,12 @@ create table author (
 
 create table publisher(
     id number generated always as identity primary key,
-    publisher varchar(50) not null
+    publisher varchar(150) not null
 );
 
 create table book (
     id number generated always as identity primary key,
-    title varchar(50) not null,
+    title varchar(150) not null,
     isbn varchar(50) not null,
     price decimal,
     author_id number,

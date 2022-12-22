@@ -6,7 +6,7 @@ import com.example.persistence.jpahibernate.dto.AuthorTransformer;
 import com.example.persistence.jpahibernate.model.Author;
 import com.example.persistence.jpahibernate.model.Book;
 import com.example.persistence.jpahibernate.repo.AuthorRepository;
-
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class AuthorService {
 
     public Author findAuthorById(Long id) {
         return this.authorRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Author id is required"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Author with id %d is not found", id)));
     }
 
     public Author findReferenceById(Long id) {
@@ -74,5 +74,24 @@ public class AuthorService {
     public List<AuthorMapperDto> findByViaArrayOfObjectsWithIds() {
         List<Object[]> result = this.authorRepository.findByViaArrayOfObjectsWithIds();
         return this.authorTransformer.transform(result);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Author> findAuthorByName(String name) {
+        return this.authorRepository.findAuthorByNameIgnoreCase(name);
+    }
+
+    @Transactional
+    public void addAuthor(AuthorMapperDto authorMapperDto) {
+        List<Author> authors = this.findAuthorByName(authorMapperDto.getName());
+        if (!authors.isEmpty()) {
+            throw new IllegalArgumentException("Author [" + authorMapperDto.getName() + "] already exist.");
+        }
+        Author author = Author.builder()
+                .name(authorMapperDto.getName())
+                .age(authorMapperDto.getAge())
+                .genre(authorMapperDto.getGenre())
+                .build();
+        this.insertAuthor(author);
     }
 }

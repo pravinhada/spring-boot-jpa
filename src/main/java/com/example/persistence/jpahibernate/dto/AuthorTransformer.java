@@ -1,11 +1,12 @@
 package com.example.persistence.jpahibernate.dto;
 
+import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Component;
 
 @Component
 public class AuthorTransformer {
@@ -24,10 +25,14 @@ public class AuthorTransformer {
                 authorMapperDto.setGenre((String) o[2]);
             }
 
-            BookMapperDto bookMapperDto = new BookMapperDto();
-            bookMapperDto.setBookId(((Number) o[3]).longValue());
-            bookMapperDto.setTitle((String) o[4]);
-            authorMapperDto.getBooks().add(bookMapperDto);
+            if (o[3] != null) { // check if book is available
+                BookMapperDto bookMapperDto = new BookMapperDto();
+                bookMapperDto.setBookId(((Number) o[3]).longValue());
+                bookMapperDto.setTitle((String) o[4]);
+                bookMapperDto.setIsbn((String) o[5]);
+                bookMapperDto.setPrice((BigDecimal) o[6]);
+                authorMapperDto.getBooks().add(bookMapperDto);
+            }
             authorDtoMap.putIfAbsent(authorMapperDto.getAuthorId(), authorMapperDto);
         }
         return new ArrayList<>(authorDtoMap.values());
