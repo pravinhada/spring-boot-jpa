@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -16,7 +17,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.example.persistence.jpahibernate.dto.AuthorDto;
+import com.example.persistence.jpahibernate.dto.AuthorMapperDto;
 import com.example.persistence.jpahibernate.service.AuthorService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.SneakyThrows;
 
@@ -29,6 +32,9 @@ class AuthorControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     @SneakyThrows
@@ -61,5 +67,21 @@ class AuthorControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].genre", Is.is("computer")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Is.is("Bob")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].age", Is.is(40)));
+    }
+
+    @Test
+    @SneakyThrows
+    void testAddAuthor() {
+        AuthorMapperDto authorMapperDto = new AuthorMapperDto();
+        authorMapperDto.setName("Author1");
+        authorMapperDto.setAge(40);
+        authorMapperDto.setGenre("computer");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/authors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(authorMapperDto)))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(MockMvcResultHandlers.print());
+
     }
 }
