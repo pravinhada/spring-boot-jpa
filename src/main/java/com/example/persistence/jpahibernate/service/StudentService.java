@@ -28,8 +28,6 @@ public class StudentService {
     @Transactional
     public void insertStudents() {
         Course course1 = this.courseRepository.findById(1L).orElseThrow();
-        Course course2 = this.courseRepository.getReferenceById(2L);
-
         Address address = new Address();
         address.setStreet("1 layton hall dr");
         address.setCity("Brokton");

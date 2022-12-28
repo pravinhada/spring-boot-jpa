@@ -16,8 +16,6 @@ public class CourseService {
     final private CourseRepository courseRepository;
     final private StudentRepository studentRepository;
 
-    final private StudentService studentService;
-
     @Transactional
     public void removeStudent() {
         Course course = this.courseRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("Course with this id is not found."));
