@@ -94,4 +94,9 @@ public class AuthorService {
                 .build();
         this.insertAuthor(author);
     }
+
+    @Transactional(readOnly = true)
+    public AuthorDto findByAuthorIdJoinFetch(Long id) {
+        return this.authorRepository.findByAuthorIdJoinFetch(id);
+    }
 }

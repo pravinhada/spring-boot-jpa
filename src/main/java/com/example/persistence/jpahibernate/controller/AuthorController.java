@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,11 @@ public class AuthorController {
 
     public List<AuthorDto> findBy() {
         return this.authorService.findBy();
+    }
+
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public AuthorDto findAuthorById(@PathVariable(name = "id") Long id) {
+        return this.authorService.findByAuthorIdJoinFetch(id);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

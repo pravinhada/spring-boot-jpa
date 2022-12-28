@@ -1,10 +1,12 @@
 package com.example.persistence.jpahibernate.controller;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.hamcrest.core.Is;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -36,10 +38,11 @@ class AuthorControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    @SneakyThrows
-    void testFindByJoinFetch() {
-        AuthorDto authorDto = new AuthorDto() {
+    private AuthorDto authorDto;
+
+    @BeforeEach
+    public void beforeEach() {
+        this.authorDto = new AuthorDto() {
             @Override
             public Integer getAge() {
                 return 40;
@@ -60,13 +63,30 @@ class AuthorControllerTest {
                 return null;
             }
         };
-        when(this.authorService.findByJoinFetch()).thenReturn(List.of(authorDto));
+    }
+
+    @Test
+    @SneakyThrows
+    void testFindByJoinFetch() {
+        when(this.authorService.findByJoinFetch()).thenReturn(List.of(this.authorDto));
         mockMvc.perform(MockMvcRequestBuilders.get("/authors"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].genre", Is.is("computer")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Is.is("Bob")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].age", Is.is(40)));
+    }
+
+    @Test
+    @SneakyThrows
+    void testFindByIdJoinFetch() {
+        when(this.authorService.findByAuthorIdJoinFetch(anyLong())).thenReturn(this.authorDto);
+        mockMvc.perform(MockMvcRequestBuilders.get("/authors/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.genre", Is.is("computer")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Is.is("Bob")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age", Is.is(40)));
     }
 
     @Test

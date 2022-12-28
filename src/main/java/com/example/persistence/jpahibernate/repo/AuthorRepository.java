@@ -44,4 +44,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     public List<Object[]> findByViaArrayOfObjectsWithIds();
 
     List<Author> findAuthorByNameIgnoreCase(String string);
+
+    @Query("select a from Author a join fetch a.books where a.id = :id")
+    AuthorDto findByAuthorIdJoinFetch(Long id);
 }
