@@ -47,4 +47,10 @@ public class StudentController {
         this.studentService.enrollStudent(id, course);
         return ProblemDetail.forStatusAndDetail(HttpStatus.CREATED, "Student enrolled!");
     }
+
+    @PostMapping(value = "/{id}/remove", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ProblemDetail removeStudent(@PathVariable(name = "id") Long id, @RequestBody CourseRequest course) {
+        this.studentService.removeStudent(id, course);
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CREATED, "Student removed from course");
+    }
 }

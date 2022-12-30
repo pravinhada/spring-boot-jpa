@@ -91,4 +91,26 @@ public class StudentService {
         courseStudent.setEnrolledOn(new Date());
         this.courseStudentRepository.save(courseStudent);
     }
+
+    @Transactional
+    public void removeStudent(Long studentId, CourseRequest course) {
+        List<Course> courses = this.courseRepository.findByTitle(course.title());
+        if (courses.isEmpty()) {
+            throw new IllegalArgumentException("Course with name [" + course.title() + "] not exist to enroll.");
+        }
+
+        Student student = this.studentRepository.findById(studentId).orElseThrow(
+                () -> new IllegalArgumentException("Student with id " + studentId + " not found"));
+
+        StudentDto studentDto = this.findByIdFetchJoin(studentId);
+        studentDto.getCourses().forEach(c -> {
+            if (c.getTitle().equalsIgnoreCase(course.title())) {
+                // remove the student here
+                CourseStudent courseStudent = this.courseStudentRepository
+                        .findById(new CourseStudentId(courses.get(0).getId(), student.getId())).orElseThrow(
+                                () -> new IllegalArgumentException("Could not found the CourseStudent"));
+                this.courseStudentRepository.deleteCourseStudentByCourseStudentId(courseStudent.getId());
+            }
+        });
+    }
 }

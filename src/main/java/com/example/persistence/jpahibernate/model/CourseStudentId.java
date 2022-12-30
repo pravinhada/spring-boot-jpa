@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Embeddable
 @Getter
@@ -16,7 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseStudentId implements Serializable {
-    
+
     @Column(name = "course_id")
     private Long courseId;
 
@@ -33,13 +34,18 @@ public class CourseStudentId implements Serializable {
         }
 
         final CourseStudentId other = (CourseStudentId) obj;
-        return Objects.equals(this.studentId, other.studentId) 
-            && Objects.equals(this.courseId, other.courseId);
+        return Objects.equals(this.studentId, other.studentId)
+                && Objects.equals(this.courseId, other.courseId);
 
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(this.studentId, this.courseId);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("courseId: %d, studentId: %d", this.courseId, this.studentId);
     }
 }

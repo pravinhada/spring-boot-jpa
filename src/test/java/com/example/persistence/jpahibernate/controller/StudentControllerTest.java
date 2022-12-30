@@ -96,4 +96,16 @@ class StudentControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.detail", Is.is("Student enrolled!")));;
     }
+
+    @Test
+    @SneakyThrows
+    void testRemoveStudent() {
+        CourseRequest course = new CourseRequest("Test", "Computer");
+        mockMvc.perform(MockMvcRequestBuilders.post("/students/1/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(course)))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detail", Is.is("Student removed from course")));;
+    }
 }

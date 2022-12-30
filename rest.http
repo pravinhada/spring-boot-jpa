@@ -67,3 +67,12 @@ Content-Type: application/json
     "title": "Database Management",
     "category": "computer"
 }
+
+###
+POST http://localhost:8080/students/5/remove
+Content-Type: application/json
+
+{
+    "title": "Database Management",
+    "category": "computer"
+}
