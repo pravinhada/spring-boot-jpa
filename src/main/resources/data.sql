@@ -1,6 +1,6 @@
 create table course(
     id number generated always as identity primary key,
-    name varchar(50),
+    title varchar(50),
     category varchar(50)
 );
 
@@ -20,8 +20,9 @@ create table student(
 );
 
 create table course_student(
-    course_id number not null ,
-    student_id number not null ,
+    course_id number not null,
+    student_id number not null,
+    enrolled_on date not null,
     constraint course_student_fk1 foreign key(course_id) references course(id),
     constraint course_student_fk2 foreign key(student_id) references student(id)
 );
@@ -50,9 +51,9 @@ create table book (
 );
 
 
-insert into course(name, category) values('Software engineering', 'Computer Science');
-insert into course(name, category) values('Database management', 'Computer Science');
-insert into course(name, category) values('Programming Language', 'Computer Science');
+insert into course(title, category) values('Software engineering', 'Computer Science');
+insert into course(title, category) values('Database management', 'Computer Science');
+insert into course(title, category) values('Programming Language', 'Computer Science');
 
 insert into address(street, city, state, zip) values('1 miller street', 'Arlington', 'MA', 2001);
 insert into address(street, city, state, zip) values('20 summer street', 'Dorchester', 'MA', 2001);
@@ -76,16 +77,16 @@ insert into student(name, address_id) values('liz', 8);
 insert into student(name, address_id) values('nick', 9);
 insert into student(name, address_id) values('rob', 10);
 
-insert into course_student(course_id, student_id) values(1, 1);
-insert into course_student(course_id, student_id) values(1, 2);
-insert into course_student(course_id, student_id) values(1, 3);
-insert into course_student(course_id, student_id) values(1, 4);
-insert into course_student(course_id, student_id) values(1, 5);
-insert into course_student(course_id, student_id) values(1, 6);
-insert into course_student(course_id, student_id) values(1, 7);
-insert into course_student(course_id, student_id) values(1, 8);
-insert into course_student(course_id, student_id) values(1, 9);
-insert into course_student(course_id, student_id) values(1, 10);
+insert into course_student(course_id, student_id, enrolled_on) values(1, 1, '2022-12-22');
+insert into course_student(course_id, student_id, enrolled_on) values(1, 2, '2022-12-22');
+insert into course_student(course_id, student_id, enrolled_on) values(1, 3, '2022-12-22');
+insert into course_student(course_id, student_id, enrolled_on) values(1, 4, '2022-12-22');
+insert into course_student(course_id, student_id, enrolled_on) values(1, 5, '2022-12-22');
+insert into course_student(course_id, student_id, enrolled_on) values(1, 6, '2022-12-22');
+insert into course_student(course_id, student_id, enrolled_on) values(1, 7, '2022-12-22');
+insert into course_student(course_id, student_id, enrolled_on) values(1, 8, '2022-12-22');
+insert into course_student(course_id, student_id, enrolled_on) values(1, 9, '2022-12-22');
+insert into course_student(course_id, student_id, enrolled_on) values(1, 10, '2022-12-22');
 
 insert into author(name, genre, age) values('Anghel Leonard', 'computer', 44);
 insert into author(name, genre, age) values('Robert C. Martin', 'computer', 46);

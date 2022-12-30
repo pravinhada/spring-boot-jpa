@@ -1,5 +1,6 @@
 package com.example.persistence.jpahibernate.service;
 
+import com.example.persistence.jpahibernate.dto.StudentDto;
 import com.example.persistence.jpahibernate.model.Address;
 import com.example.persistence.jpahibernate.model.Course;
 import com.example.persistence.jpahibernate.model.Student;
@@ -8,6 +9,9 @@ import com.example.persistence.jpahibernate.repo.CourseRepository;
 import com.example.persistence.jpahibernate.repo.InstructorRepository;
 import com.example.persistence.jpahibernate.repo.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +43,7 @@ public class StudentService {
         Student student = new Student();
         student.setName("Jimmi");
         student.setAddress(address);
-        student.addCourse(course1);
+        //student.addCourse(course1);
 
         /*
         student.addCourse(course1);
@@ -61,8 +65,18 @@ public class StudentService {
         */
         this.studentRepository.save(student);
 
-        course1.addStudent(student);
+        //course1.addStudent(student);
 
         log.info("Total Students: {}", course1.getStudents().size());
+    }
+
+    @Transactional(readOnly = true) 
+    public List<StudentDto> findByStudentsFetchJoin() {
+        return this.studentRepository.findByStudentsJoinFetch();
+    }
+
+    @Transactional(readOnly = true) 
+    public StudentDto findByIdFetchJoin(Long id) {
+        return this.studentRepository.findByIdJoinFetch(id);
     }
 }

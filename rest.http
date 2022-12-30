@@ -21,3 +21,17 @@ GET http://localhost:8080/books/1
 
 ###
 GET http://localhost:8080/books/computer%20programming/title
+
+
+###
+GET http://localhost:8080/courses/1
+
+###
+GET http://localhost:8080/courses
+
+
+###
+GET http://localhost:8080/students
+
+###
+GET http://localhost:8080/students/1
