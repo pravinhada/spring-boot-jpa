@@ -5,6 +5,8 @@ import com.example.persistence.jpahibernate.model.Course;
 import com.example.persistence.jpahibernate.model.Student;
 import com.example.persistence.jpahibernate.repo.CourseRepository;
 import com.example.persistence.jpahibernate.repo.StudentRepository;
+import com.example.persistence.jpahibernate.request.CourseRequest;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,16 +25,18 @@ public class CourseService {
 
     @Transactional
     public void removeStudent() {
-        Course course = this.courseRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("Course with this id is not found."));
+        Course course = this.courseRepository.findById(1L)
+                .orElseThrow(() -> new IllegalArgumentException("Course with this id is not found."));
         Student student = this.studentRepository.findById(8L).orElseThrow(
                 () -> new IllegalArgumentException("Student with this id is not found."));
-        //course.removeStudent(student);
+        // course.removeStudent(student);
         log.info("student is removed ", student);
     }
 
     @Transactional(readOnly = true)
     public Course getCourse(Long id) {
-        return this.courseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("course with id " + id + " is not found."));
+        return this.courseRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("course with id " + id + " is not found."));
     }
 
     @Transactional(readOnly = true)
@@ -40,8 +44,20 @@ public class CourseService {
         return this.courseRepository.findByJoinFetch();
     }
 
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public CourseDto findCourseById(Long id) {
         return this.courseRepository.findByIdJoinFetch(id);
+    }
+
+    @Transactional
+    public void addCourse(CourseRequest courseRequest) {
+        Course course = new Course();
+        course.setTitle(courseRequest.title());
+        course.setCategory(courseRequest.category());
+        List<Course> courses = this.courseRepository.findByTitle(courseRequest.title());
+        if (!courses.isEmpty()) {
+            throw new IllegalArgumentException("Course with name [" + courseRequest.title() + "] is already exist.");
+        }
+        this.courseRepository.save(course);
     }
 }

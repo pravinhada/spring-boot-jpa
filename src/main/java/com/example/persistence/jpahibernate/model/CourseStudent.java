@@ -33,6 +33,7 @@ public class CourseStudent {
     @ManyToOne(fetch = FetchType.LAZY)
     private Student student;
 
+    @Builder.Default
     private Date enrolledOn = new Date();
 
     @Override

@@ -29,9 +29,31 @@ GET http://localhost:8080/courses/1
 ###
 GET http://localhost:8080/courses
 
+###
+POST http://localhost:8080/courses
+Content-Type: application/json
+
+{
+    "title": "Spring Boot Persistence",
+    "category": "computer"
+}
 
 ###
 GET http://localhost:8080/students
 
 ###
 GET http://localhost:8080/students/1
+
+###
+POST http://localhost:8080/students
+Content-Type: application/json
+
+{
+    "name": "micheal",
+    "address": {
+        "street": "100 ocean street",
+        "city": "Miami",
+        "state": "FL",
+        "zipCode": 2001
+    }
+}

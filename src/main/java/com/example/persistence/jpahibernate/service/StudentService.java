@@ -8,6 +8,8 @@ import com.example.persistence.jpahibernate.repo.AddressRepository;
 import com.example.persistence.jpahibernate.repo.CourseRepository;
 import com.example.persistence.jpahibernate.repo.InstructorRepository;
 import com.example.persistence.jpahibernate.repo.StudentRepository;
+import com.example.persistence.jpahibernate.request.StudentRequest;
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -43,40 +45,61 @@ public class StudentService {
         Student student = new Student();
         student.setName("Jimmi");
         student.setAddress(address);
-        //student.addCourse(course1);
+        // student.addCourse(course1);
 
         /*
-        student.addCourse(course1);
-        student.addCourse(course2);
-        student.setAddress(address);
-
-        Student student1 = new Student();
-        student1.setName("ben");
-        student1.addCourse(course2);
-        student1.setAddress(address);
-
-        this.studentRepository.saveAll(List.of(student, student1));
-
-        Instructor instructor = new Instructor();
-        instructor.setName("Micheal T");
-        instructor.setAddress(address);
-
-        this.instructorRepository.save(instructor);
-        */
+         * student.addCourse(course1);
+         * student.addCourse(course2);
+         * student.setAddress(address);
+         * 
+         * Student student1 = new Student();
+         * student1.setName("ben");
+         * student1.addCourse(course2);
+         * student1.setAddress(address);
+         * 
+         * this.studentRepository.saveAll(List.of(student, student1));
+         * 
+         * Instructor instructor = new Instructor();
+         * instructor.setName("Micheal T");
+         * instructor.setAddress(address);
+         * 
+         * this.instructorRepository.save(instructor);
+         */
         this.studentRepository.save(student);
 
-        //course1.addStudent(student);
+        // course1.addStudent(student);
 
         log.info("Total Students: {}", course1.getStudents().size());
     }
 
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<StudentDto> findByStudentsFetchJoin() {
         return this.studentRepository.findByStudentsJoinFetch();
     }
 
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public StudentDto findByIdFetchJoin(Long id) {
         return this.studentRepository.findByIdJoinFetch(id);
+    }
+
+    @Transactional
+    public void enrollStudent(StudentRequest studentRequest) {
+        if (!this.studentRepository.findByName(studentRequest.name()).isEmpty()) {
+            throw new IllegalArgumentException("Student name already exist. Try another!");
+        }
+
+        Address address = new Address();
+        address.setStreet(studentRequest.address().street());
+        address.setCity(studentRequest.address().city());
+        address.setState(studentRequest.address().state());
+        address.setZip(studentRequest.address().zipCode());
+
+        this.addressRepository.save(address);
+
+        Student student = new Student();
+        student.setName(studentRequest.name());
+        student.setAddress(address);
+
+        this.studentRepository.save(student);
     }
 }
