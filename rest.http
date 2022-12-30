@@ -34,7 +34,7 @@ POST http://localhost:8080/courses
 Content-Type: application/json
 
 {
-    "title": "Spring Boot Persistence",
+    "title": "Database Management",
     "category": "computer"
 }
 
@@ -42,7 +42,7 @@ Content-Type: application/json
 GET http://localhost:8080/students
 
 ###
-GET http://localhost:8080/students/1
+GET http://localhost:8080/students/5
 
 ###
 POST http://localhost:8080/students
@@ -56,4 +56,14 @@ Content-Type: application/json
         "state": "FL",
         "zipCode": 2001
     }
+}
+
+
+###
+POST http://localhost:8080/students/5/enroll
+Content-Type: application/json
+
+{
+    "title": "Database Management",
+    "category": "computer"
 }

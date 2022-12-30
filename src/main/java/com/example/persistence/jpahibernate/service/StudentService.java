@@ -3,15 +3,18 @@ package com.example.persistence.jpahibernate.service;
 import com.example.persistence.jpahibernate.dto.StudentDto;
 import com.example.persistence.jpahibernate.model.Address;
 import com.example.persistence.jpahibernate.model.Course;
+import com.example.persistence.jpahibernate.model.CourseStudent;
+import com.example.persistence.jpahibernate.model.CourseStudentId;
 import com.example.persistence.jpahibernate.model.Student;
 import com.example.persistence.jpahibernate.repo.AddressRepository;
 import com.example.persistence.jpahibernate.repo.CourseRepository;
+import com.example.persistence.jpahibernate.repo.CourseStudentRepository;
 import com.example.persistence.jpahibernate.repo.InstructorRepository;
 import com.example.persistence.jpahibernate.repo.StudentRepository;
+import com.example.persistence.jpahibernate.request.CourseRequest;
 import com.example.persistence.jpahibernate.request.StudentRequest;
 
-import lombok.extern.slf4j.Slf4j;
-
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -19,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.annotation.Resource;
 
-@Slf4j
 @Service
 public class StudentService {
     @Resource
@@ -30,47 +32,8 @@ public class StudentService {
     private AddressRepository addressRepository;
     @Resource
     private InstructorRepository instructorRepository;
-
-    @Transactional
-    public void insertStudents() {
-        Course course1 = this.courseRepository.findById(1L).orElseThrow();
-        Address address = new Address();
-        address.setStreet("1 layton hall dr");
-        address.setCity("Brokton");
-        address.setState("MA");
-        address.setZip(13400);
-
-        this.addressRepository.save(address);
-
-        Student student = new Student();
-        student.setName("Jimmi");
-        student.setAddress(address);
-        // student.addCourse(course1);
-
-        /*
-         * student.addCourse(course1);
-         * student.addCourse(course2);
-         * student.setAddress(address);
-         * 
-         * Student student1 = new Student();
-         * student1.setName("ben");
-         * student1.addCourse(course2);
-         * student1.setAddress(address);
-         * 
-         * this.studentRepository.saveAll(List.of(student, student1));
-         * 
-         * Instructor instructor = new Instructor();
-         * instructor.setName("Micheal T");
-         * instructor.setAddress(address);
-         * 
-         * this.instructorRepository.save(instructor);
-         */
-        this.studentRepository.save(student);
-
-        // course1.addStudent(student);
-
-        log.info("Total Students: {}", course1.getStudents().size());
-    }
+    @Resource
+    private CourseStudentRepository courseStudentRepository;
 
     @Transactional(readOnly = true)
     public List<StudentDto> findByStudentsFetchJoin() {
@@ -83,7 +46,7 @@ public class StudentService {
     }
 
     @Transactional
-    public void enrollStudent(StudentRequest studentRequest) {
+    public void addStudent(StudentRequest studentRequest) {
         if (!this.studentRepository.findByName(studentRequest.name()).isEmpty()) {
             throw new IllegalArgumentException("Student name already exist. Try another!");
         }
@@ -101,5 +64,31 @@ public class StudentService {
         student.setAddress(address);
 
         this.studentRepository.save(student);
+    }
+
+    @Transactional
+    public void enrollStudent(Long studentId, CourseRequest course) {
+        List<Course> courses = this.courseRepository.findByTitle(course.title());
+        if (courses.isEmpty()) {
+            throw new IllegalArgumentException("Course with name [" + course.title() + "] not exist to enroll.");
+        }
+
+        Student student = this.studentRepository.findById(studentId).orElseThrow(
+                () -> new IllegalArgumentException("Student with id " + studentId + " not found"));
+
+        StudentDto studentDto = this.findByIdFetchJoin(studentId);
+        studentDto.getCourses().forEach(c -> {
+            if (c.getTitle().equalsIgnoreCase(course.title())) {
+                throw new IllegalArgumentException(
+                        "Student " + studentDto.getName() + " is already enrolled in course " + course.title());
+            }
+        });
+
+        CourseStudent courseStudent = new CourseStudent();
+        courseStudent.setId(new CourseStudentId(courses.get(0).getId(), studentId));
+        courseStudent.setCourse(courses.get(0));
+        courseStudent.setStudent(student);
+        courseStudent.setEnrolledOn(new Date());
+        this.courseStudentRepository.save(courseStudent);
     }
 }
