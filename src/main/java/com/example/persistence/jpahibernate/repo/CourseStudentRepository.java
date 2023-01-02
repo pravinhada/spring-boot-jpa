@@ -1,5 +1,7 @@
 package com.example.persistence.jpahibernate.repo;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +14,7 @@ import com.example.persistence.jpahibernate.model.CourseStudentId;
 public interface CourseStudentRepository extends JpaRepository<CourseStudent, CourseStudentId> {
 
     @Modifying
-    @Query("delete from CourseStudent c where c.id = :id")
-    void deleteCourseStudentByCourseStudentId(CourseStudentId id);
+    @Query("delete from CourseStudent c where c.id in :id")
+    void deleteCourseStudentByCourseStudentId(List<CourseStudentId> id);
 
 }

@@ -30,14 +30,14 @@ public class Course {
 
     private String category;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     private Set<CourseStudent> students = new HashSet<>();
 
     public void addStudent(Student student) {
         CourseStudent courseStudent = CourseStudent.builder()
-            .course(this)
-            .student(student)
-            .build();
+                .course(this)
+                .student(student)
+                .build();
         students.add(courseStudent);
         student.getCourses().add(courseStudent);
     }

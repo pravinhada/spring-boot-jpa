@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,5 +40,11 @@ public class CourseController {
     public ProblemDetail addCourse(@RequestBody CourseRequest courseRequest) {
         this.courseService.addCourse(courseRequest);
         return ProblemDetail.forStatusAndDetail(HttpStatus.CREATED, "Added the course");
+    }
+
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ProblemDetail deleteCourse(@PathVariable(name = "id") Long id) {
+        this.courseService.deleteCourse(id);
+        return ProblemDetail.forStatusAndDetail(HttpStatus.OK, "Deleted course");
     }
 }

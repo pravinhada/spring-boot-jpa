@@ -33,7 +33,7 @@ public class Student {
     private String name;
 
     @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "student")
+    @OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, orphanRemoval = true, mappedBy = "student")
     private Set<CourseStudent> courses = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

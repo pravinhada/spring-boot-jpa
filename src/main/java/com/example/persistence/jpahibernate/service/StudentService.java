@@ -109,7 +109,7 @@ public class StudentService {
                 CourseStudent courseStudent = this.courseStudentRepository
                         .findById(new CourseStudentId(courses.get(0).getId(), student.getId())).orElseThrow(
                                 () -> new IllegalArgumentException("Could not found the CourseStudent"));
-                this.courseStudentRepository.deleteCourseStudentByCourseStudentId(courseStudent.getId());
+                this.courseStudentRepository.deleteCourseStudentByCourseStudentId(List.of(courseStudent.getId()));
             }
         });
     }
