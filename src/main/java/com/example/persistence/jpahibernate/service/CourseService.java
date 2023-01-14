@@ -1,6 +1,8 @@
 package com.example.persistence.jpahibernate.service;
 
 import com.example.persistence.jpahibernate.dto.CourseDto;
+import com.example.persistence.jpahibernate.event.CourseEvent;
+import com.example.persistence.jpahibernate.event.EventType;
 import com.example.persistence.jpahibernate.model.Course;
 import com.example.persistence.jpahibernate.model.CourseStudentId;
 import com.example.persistence.jpahibernate.repo.CourseRepository;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,8 @@ public class CourseService {
 
     final private CourseRepository courseRepository;
     final private CourseStudentRepository courseStudentRepository;
+
+    private final StreamBridge streamBridge;
 
     @Transactional(readOnly = true)
     public Course getCourse(Long id) {
@@ -47,6 +52,7 @@ public class CourseService {
             throw new IllegalArgumentException("Course with name [" + courseRequest.title() + "] is already exist.");
         }
         this.courseRepository.save(course);
+        this.streamBridge.send("course", new CourseEvent(124L, EventType.CREATED));
     }
 
     @Transactional
@@ -55,5 +61,6 @@ public class CourseService {
         List<CourseStudentId> courseStudentIds = course.getStudents().stream().map(s -> s.getId()).toList();
         this.courseStudentRepository.deleteCourseStudentByCourseStudentId(courseStudentIds);
         this.courseRepository.deleteCourseById(course.getId());
+        this.streamBridge.send("course", new CourseEvent(124L, EventType.DELETED));
     }
 }
