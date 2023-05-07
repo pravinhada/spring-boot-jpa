@@ -10,7 +10,7 @@ import com.example.persistence.jpahibernate.event.CourseEvent;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Configuration
+//@Configuration
 public class StreamCloud {
 
     @Bean
